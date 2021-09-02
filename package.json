@@ -12,7 +12,8 @@
     "test:integration": "yarn test --watch -c jest-integration-config.ts",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:staged": "yarn test --findRelatedTests",
-    "test:ci": "yarn test:verbose --coverage=true"
+    "test:ci": "yarn test:verbose --coverage=true",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
