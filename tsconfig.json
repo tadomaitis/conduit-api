@@ -1,10 +1,22 @@
 {
   "compilerOptions": {
-    "strict": true,
     "outDir": "./dist",
     "module": "commonjs",
     "target": "ES2019",
+    "rootDir": ".",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    },
     "esModuleInterop": true,
     "allowJs": true
-  }
+  },
+  "include": [
+    "src",
+    "jest.config.ts",
+    "jest-integration-config.ts",
+    "jest-unit-config.ts"
+  ]
 }
