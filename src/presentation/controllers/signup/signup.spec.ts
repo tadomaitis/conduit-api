@@ -1,5 +1,6 @@
 import { SignUpController } from '@/presentation/controllers/signup/signup'
 import { MissingParamError } from '@/presentation/errors/missing-param-error'
+import { badRequest } from '@/presentation/helpers/http-helper'
 
 interface SutTypes {
   sut: SignUpController
@@ -22,8 +23,7 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('username'))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('username')))
   })
 
   it('Should return 400 if no email is provided', () => {
@@ -35,8 +35,7 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('email'))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
   })
 
   it('Should return 400 if no password is provided', () => {
@@ -48,7 +47,6 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('password'))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('password')))
   })
 })
