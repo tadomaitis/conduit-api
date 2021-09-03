@@ -1,8 +1,19 @@
 import { SignUpController } from '@/presentation/controllers/signup/signup'
 
+interface SutTypes {
+  sut: SignUpController
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new SignUpController()
+  return {
+    sut
+  }
+}
+
 describe('SignUp Controller', () => {
   it('Should return 400 if no username is provided', () => {
-    const sut = new SignUpController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         email: 'any_email@mail.com',
@@ -15,7 +26,7 @@ describe('SignUp Controller', () => {
   })
 
   it('Should return 400 if no email is provided', () => {
-    const sut = new SignUpController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         username: 'any_name',
@@ -28,7 +39,7 @@ describe('SignUp Controller', () => {
   })
 
   it('Should return 400 if no password is provided', () => {
-    const sut = new SignUpController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         username: 'any_name',
