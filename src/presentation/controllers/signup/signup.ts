@@ -1,3 +1,5 @@
+import { MissingParamError } from '@/presentation/errors/missing-param-error'
+
 export class SignUpController {
   handle (httpRequest: any): any {
     const requiredFields = ['username', 'email', 'password']
@@ -5,7 +7,7 @@ export class SignUpController {
       if (!httpRequest.body[field]) {
         return {
           statusCode: 400,
-          body: new Error(`Missing param error: ${field}`)
+          body: new MissingParamError(field)
         }
       }
     }
