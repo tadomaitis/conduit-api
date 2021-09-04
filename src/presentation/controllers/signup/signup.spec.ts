@@ -1,7 +1,26 @@
+import { UserModel } from '@/domain/models/user'
+import { AddUser, AddUserModel } from '@/domain/usecases/add-user'
 import { SignUpController } from '@/presentation/controllers/signup/signup'
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/helpers/http-helper'
 import { EmailValidator } from '@/presentation/protocols'
+
+const makeAddUser = (): AddUser => {
+  class AddUserStub implements AddUser {
+    add (account: AddUserModel): UserModel {
+      return makeFakeUser()
+    }
+  }
+  return new AddUserStub()
+}
+
+const makeFakeUser = (): UserModel => ({
+  email: 'valid_email@mail.com',
+  token: 'valid_token',
+  username: 'valid_username',
+  bio: 'valid_bio',
+  image: null
+})
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -15,14 +34,17 @@ const makeEmailValidator = (): EmailValidator => {
 interface SutTypes {
   sut: SignUpController
   emailValidatorStub: EmailValidator
+  addUserStub: AddUser
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
-  const sut = new SignUpController(emailValidatorStub)
+  const addUserStub = makeAddUser()
+  const sut = new SignUpController(emailValidatorStub, addUserStub)
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    addUserStub
   }
 }
 
@@ -105,5 +127,23 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError())
+  })
+
+  it('Should call AddUser with correct values', () => {
+    const { sut, addUserStub } = makeSut()
+    const addSpy = jest.spyOn(addUserStub, 'add')
+    const httpRequest = {
+      body: {
+        username: 'any_name',
+        email: 'valid_email@mail.com',
+        password: 'any_password'
+      }
+    }
+    sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith({
+      username: 'any_name',
+      email: 'valid_email@mail.com',
+      password: 'any_password'
+    })
   })
 })
