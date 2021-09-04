@@ -3,6 +3,7 @@ import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
 import { MissingParamError } from '@/presentation/errors/missing-param-error'
 import { badRequest } from '@/presentation/helpers/http-helper'
 import { EmailValidator } from '@/presentation/protocols/email-validator'
+import { ServerError } from '@/presentation/errors/server-error'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -106,6 +107,6 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new Error('Internal Server Error'))
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })

@@ -4,6 +4,7 @@ import { HttpResponse, HttpRequest } from '@/presentation/protocols/http'
 import { badRequest } from '@/presentation/helpers/http-helper'
 import { Controller } from '@/presentation/protocols/controller'
 import { EmailValidator } from '@/presentation/protocols/email-validator'
+import { ServerError } from '@/presentation/errors/server-error'
 
 export class SignUpController implements Controller {
   private readonly emailValidator: EmailValidator
@@ -27,7 +28,7 @@ export class SignUpController implements Controller {
     } catch (error) {
       return {
         statusCode: 500,
-        body: new Error('Internal Server Error')
+        body: new ServerError()
       }
     }
   }
