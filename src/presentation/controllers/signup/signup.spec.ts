@@ -1,6 +1,6 @@
 import { SignUpController } from '@/presentation/controllers/signup/signup'
-import { InvalidParamError, MissingParamError, ServerError } from '@/presentation/errors'
-import { badRequest } from '@/presentation/helpers/http-helper'
+import { InvalidParamError, MissingParamError } from '@/presentation/errors'
+import { badRequest, serverError } from '@/presentation/helpers/http-helper'
 import { EmailValidator } from '@/presentation/protocols'
 
 const makeEmailValidator = (): EmailValidator => {
@@ -104,7 +104,6 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse).toEqual(serverError())
   })
 })
