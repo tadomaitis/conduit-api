@@ -1,7 +1,7 @@
 import { SignUpController } from './signup'
 import { AddUser, AddUserModel, EmailValidator, UserModel } from '@/presentation/controllers/signup/signup-protocols'
 import { MissingParamError, InvalidParamError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers/http-helper'
+import { badRequest, serverError, ok } from '@/presentation/helpers/http-helper'
 
 const makeAddUser = (): AddUser => {
   class AddUserStub implements AddUser {
@@ -171,13 +171,6 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toEqual({
-      email: 'valid_email@mail.com',
-      token: 'valid_token',
-      username: 'valid_username',
-      bio: 'valid_bio',
-      image: null
-    })
+    expect(httpResponse).toEqual(ok(makeFakeUser()))
   })
 })
