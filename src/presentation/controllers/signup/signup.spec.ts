@@ -5,8 +5,8 @@ import { badRequest, serverError, ok } from '@/presentation/helpers/http-helper'
 
 const makeAddUser = (): AddUser => {
   class AddUserStub implements AddUser {
-    add (account: AddUserModel): UserModel {
-      return makeFakeUser()
+    async add (account: AddUserModel): Promise<UserModel> {
+      return await new Promise(resolve => resolve(makeFakeUser()))
     }
   }
   return new AddUserStub()
