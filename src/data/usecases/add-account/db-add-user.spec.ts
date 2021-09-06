@@ -7,10 +7,23 @@ class EncrypterStub implements Encrypter {
   }
 }
 
+interface SutTypes {
+  sut: DbAddUser
+  encrypterStub: EncrypterStub
+}
+
+const makeSut = (): SutTypes => {
+  const encrypterStub = new EncrypterStub()
+  const sut = new DbAddUser(encrypterStub)
+  return {
+    sut,
+    encrypterStub
+  }
+}
+
 describe('DbAddUser Usecase', () => {
   it('Should call Encrypter with correct password', async () => {
-    const encrypterStub = new EncrypterStub()
-    const sut = new DbAddUser(encrypterStub)
+    const { sut, encrypterStub } = makeSut()
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
     const userData = {
       username: 'valid_name',
